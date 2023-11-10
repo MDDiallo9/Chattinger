@@ -17,6 +17,7 @@ app.get("/", function (req, res) {
   res.sendFile("/index.html",{root:__dirname})
 });
 io.on("connection",(socket) => {
+    socket.broadcast.emit("users",{"userId":socket.id})
     socket.on("message",(data) => {
         console.dir(socket);
         console.dir(data);
