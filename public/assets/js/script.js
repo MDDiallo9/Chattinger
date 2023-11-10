@@ -3,6 +3,17 @@ const chatBox = document.querySelector("#chatbox");
 const ul = document.querySelector("ul");
 const userName = document.querySelector('#username');
 const socket = io();
+const form = document.querySelector('form');
+
+form.addEventListener("submit",(e) => {
+  e.preventDefault()
+  let msg = chatBox.value;
+  chatBox.value = "";
+  const li = document.createElement("li");
+  li.textContent = ` ${msg}`;
+  ul.append(li);
+  socket.emit("message", { message: msg, date: Date.now()});
+})
 
 sendBtn.addEventListener("click", (e) => {
   let msg = chatBox.value;
@@ -20,3 +31,5 @@ socket.on("resMessage", (data) => {
   li.textContent = `${data.data.message}`;
   ul.append(li);
 });
+
+console.log(format(Date.now()))
