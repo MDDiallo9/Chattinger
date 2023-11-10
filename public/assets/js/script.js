@@ -8,40 +8,48 @@ const form = document.querySelector('form')
 const dialog = document.querySelector("dialog")
 
 // Username modal
-dialog.showModal()
-
+/* dialog.showModal() */
+// Render chat history
+const renderChats = (history) => {
+  for (let chat of history){
+    const li = document.createElement("li")
+    li.innerHTML = `<div>${chat.message}<span>${chat.date}</span></div>`
+    li.classList.add("message")
+    ul.append(li)
+  }
+}
+//
 form.addEventListener("submit",(e) => {
   e.preventDefault()
   let msg = chatBox.value;
   chatBox.value = "";
   const li = document.createElement("li");
   li.textContent = ` ${msg}`;
-  ul.append(li);
-  socket.emit("message", { message: msg, date: Date.now()});
+  /* ul.append(li); */
+  socket.emit("message", { message: msg, date: new Date()});
 })
 
-sendBtn.addEventListener("click", (e) => {
+/* sendBtn.addEventListener("click", (e) => {
   let msg = chatBox.value;
   chatBox.value = "";
   const li = document.createElement("li");
   li.textContent = ` ${msg}`;
   ul.append(li);
   socket.emit("message", { message: msg, date: Date.now()});
-});
+}); */
 
 socket.on("resMessage", (data) => {
   /* ul.append(data) */
-  console.log(data);
-  const li = document.createElement("li");
-  li.textContent = `${data.data.message}`;
-  ul.append(li);
+  renderChats(data.chats)
 });
 socket.on("users",(data) => {
   const li = document.createElement('li');
   li.textContent = data.userId
   usersList.append(li)
   const joinMsg = document.createElement("li")
-  joinMsg.textContent = `${date.userId} a rejoint le stage`
+  joinMsg.textContent = `${data.userId} a rejoint le stage`
   ul.append(joinMsg)
 })
+
+
 
